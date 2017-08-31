@@ -19,5 +19,3 @@ module.exports = function(app, serviceManager){
 	serviceManager.set("push-notifications", PushNotificationInstance);
 	serviceManager.set("notifications-module", Notification);
 };
-
-

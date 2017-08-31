@@ -12,9 +12,10 @@ let server;
 const fs = require('fs-extra');
 const axios = require('axios');
 
-describe('integration test for services', function () {
-	before(function (done) {
-		this.timeout(15000);
+
+describe('integration test for services', function() {
+	before(function(done) {
+		this.timeout(30000);
 		_setUpApplication(done);
 	});
 
@@ -49,10 +50,11 @@ describe('integration test for services', function () {
 				});
 		});
 	});
-	describe('ObjectStorage', function () {
-		it('should create a container `test` and write content', function () {
-			this.timeout(10000);
-			let expectedMessages = [
+
+	describe('ObjectStorage', function() {
+		it('should create a container `test` and write content', function() {
+			this.timeout(30000);
+			var expectedMessages = [
 				'test container was created',
 				'ninpocho object was added'
 			];
@@ -68,6 +70,33 @@ describe('integration test for services', function () {
 				})
 				.catch(function (err) {
 					if (err.response) {
+						assert.isNotOk(err.response.data, 'This should not happen');
+					} else {
+						assert.isNotOk(JSON.stringify(err), 'This should not happen');
+					}
+
+				});
+		});
+	});
+
+	describe('Push', function() {
+		it('should create a push notification', function() {
+			this.timeout(30000);
+			var expectedMessages = [
+			];
+
+			var options = {
+				'method': 'get',
+				'url': 'http://localhost:3000/push-test'
+			};
+
+			return axios(options)
+				.then(function(response) {
+					console.log(response);
+					assert.deepEqual(response.data, expectedMessages);
+				})
+				.catch(function(err){
+					if(err.response){
 						assert.isNotOk(err.response.data, 'This should not happen');
 					} else {
 						assert.isNotOk(JSON.stringify(err), 'This should not happen');
